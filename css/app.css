@@ -637,21 +637,15 @@ a:hover {
   color: #3182ce;
 }
 
-nav a, nav button {
-  color: #4a5568;
-  margin-left: 0.75rem;
-  margin-right: 0.75rem;
-}
-
-nav a:hover, nav button:hover {
-  color: #1a202c;
-}
-
 blockquote {
   border-right-width: 8px;
   border-color: #a0aec0;
   padding: 0.75rem;
   margin-bottom: 0.75rem;
+}
+
+button {
+  outline: 0;
 }
 
 h1 {
@@ -667,17 +661,17 @@ h2 {
   margin-top: 1.25rem;
 }
 
-input[type=text], input[type=password], textarea, .wysiwyg {
+input[type=text] {
   outline: 0;
   background-color: #edf2f7;
   border-color: #edf2f7;
   padding: 0.5rem;
   display: block;
-  width: 100%;
   border-width: 4px;
+  border-radius: 0.25rem;
 }
 
-input[type=text]:focus, input[type=password]:focus, textarea:focus, .wysiwyg:focus {
+input[type=text]:focus {
   border-color: #90cdf4;
 }
 
@@ -727,11 +721,6 @@ ul {
   margin-bottom: 0.25rem;
   display: block;
   font-weight: 700;
-}
-
-.wysiwyg {
-  height: 16rem;
-  overflow: auto;
 }
 
 .appearance-none {

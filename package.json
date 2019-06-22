@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/mrmowji/rasgir#readme",
   "dependencies": {
+    "persian-date": "^1.0.5",
     "vue": "^2.6.10"
   },
   "devDependencies": {
