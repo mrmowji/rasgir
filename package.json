@@ -1,0 +1,25 @@
+{
+  "name": "rasgir",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "tailwindcss": "npx tailwind build css/tailwindcss.css -o css/app.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrmowji/rasgir.git"
+  },
+  "author": "Creative Panda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrmowji/rasgir/issues"
+  },
+  "homepage": "https://github.com/mrmowji/rasgir#readme",
+  "dependencies": {
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "npx": "^10.2.0",
+    "tailwindcss": "^1.0.4"
+  }
+}

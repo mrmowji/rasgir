@@ -1,0 +1,175 @@
+﻿@tailwind base;
+
+@tailwind components;
+
+/* add extracted components here */
+a {
+  @apply text-blue-500;
+}
+
+  a:hover {
+    @apply text-blue-600;
+  }
+
+nav a, nav button {
+  @apply text-gray-700 mx-3;
+}
+
+  nav a:hover, nav button:hover {
+    @apply text-gray-900;
+  }
+
+blockquote {
+  @apply border-r-8 border-gray-500 p-3 mb-3;
+}
+
+h1 {
+  @apply text-3xl font-bold mb-2;
+}
+
+h2 {
+  @apply text-xl font-bold mb-2 mt-5;
+}
+
+input[type=text], input[type=password], textarea, .wysiwyg {
+  @apply outline-none bg-gray-200 border-gray-200 p-2 block w-full border-4;
+}
+
+  input[type=text]:focus, input[type=password]:focus, textarea:focus, .wysiwyg:focus {
+    @apply border-blue-300;
+  }
+
+input[type=submit] {
+  @apply w-full block bg-gray-600 p-3 text-white cursor-pointer;
+}
+
+  input[type=submit]:hover {
+    @apply bg-gray-700;
+  }
+
+label {
+  @apply text-gray-500;
+}
+
+p {
+  @apply mb-3;
+}
+
+  p:last-child {
+    @apply mb-0;
+  }
+
+time {
+  @apply text-gray-500 ml-5;
+}
+
+ul {
+  @apply list-disc list-inside mb-3;
+}
+
+.field {
+  @apply mb-5;
+}
+
+.field-validation-error {
+  @apply text-red-500 my-1 block font-bold;
+}
+
+.wysiwyg {
+  @apply h-64 overflow-auto;
+}
+
+@tailwind utilities;
+
+@font-face {
+  font-family: Samim;
+  font-style: normal;
+  font-weight: bold;
+  src: url('../fonts/samim-bold.eot');
+  src: url('../fonts/samim-bold.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/samim-bold.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/samim-bold.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/samim-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Samim;
+  font-style: normal;
+  font-weight: 900;
+  src: url('../fonts/samim-bold.eot');
+  src: url('../fonts/samim-bold.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/samim-bold.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/samim-bold.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/samim-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Samim;
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/samim-bold.eot');
+  src: url('../fonts/samim-bold.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/samim-bold.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/samim-bold.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/samim-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Samim;
+  font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/samim.eot');
+  src: url('../fonts/samim.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/samim.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/samim.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/samim.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Vazir;
+  font-style: normal;
+  font-weight: bold;
+  src: url('../fonts/vazir-bold.eot');
+  src: url('../fonts/vazir-bold.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/vazir-bold.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/vazir-bold.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/vazir-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Vazir;
+  font-style: normal;
+  font-weight: 900;
+  src: url('../fonts/vazir-bold.eot');
+  src: url('../fonts/vazir-bold.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/vazir-bold.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/vazir-bold.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/vazir-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Vazir;
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/vazir-bold.eot');
+  src: url('../fonts/vazir-bold.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/vazir-bold.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/vazir-bold.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/vazir-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Vazir;
+  font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/vazir.eot');
+  src: url('../fonts/vazir.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+  url('../fonts/vazir.woff2') format('woff2'), /* FF39+,Chrome36+, Opera24+*/
+  url('../fonts/vazir.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('../fonts/vazir.ttf') format('truetype');
+}
+
+:not(.icon) {
+  font-family: Vazir, Tahoma, sans-serif !important;
+  letter-spacing: -0.5px;
+}
