@@ -27,11 +27,11 @@ h2 {
   @apply text-xl font-bold mb-2 mt-5;
 }
 
-input[type=text] {
+input[type=text], textarea {
   @apply outline-none bg-gray-200 border-gray-200 p-2 block border-4 rounded;
 }
 
-  input[type=text]:focus {
+  input[type=text]:focus, textarea:focus {
     @apply border-blue-300;
   }
 

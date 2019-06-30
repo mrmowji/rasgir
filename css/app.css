@@ -661,7 +661,7 @@ h2 {
   margin-top: 1.25rem;
 }
 
-input[type=text] {
+input[type=text], textarea {
   outline: 0;
   background-color: #edf2f7;
   border-color: #edf2f7;
@@ -671,7 +671,7 @@ input[type=text] {
   border-radius: 0.25rem;
 }
 
-input[type=text]:focus {
+input[type=text]:focus, textarea:focus {
   border-color: #90cdf4;
 }
 

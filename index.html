@@ -12,45 +12,53 @@
 
   <div id="app" style="width: 700px; max-width: 100%;" class="mx-auto px-5">
     <div class="flex mx-auto my-20">
-      <div class="w-1/2 flex flex-wrap border-l-2 border-gray-200 pl-4">
-        <div class="mb-3 w-full flex flex-wrap items-center">
-          <label class="w-1/3 text-left pl-3">شماره فاکتور</label>
-          <input type="text" v-model="newInvoice.number" v-on:keyup.enter="addNewInvoice" class="w-2/3" autofocus>
+      <div class="w-1/2 pl-4">
+        <div>
+          <div class="mb-3 w-full flex flex-wrap items-center">
+            <label class="w-1/3 text-left pl-3">شماره فاکتور</label>
+            <input type="text" v-model="newInvoice.number" v-on:keyup.enter="addNewInvoice" class="w-2/3" autofocus>
+          </div>
+          <div class="mb-3 w-full flex flex-wrap items-center">
+            <label class="w-1/3 text-left pl-3">تاریخ فاکتور</label>
+            <input type="text" v-model="newInvoice.date" v-on:keyup.enter="addNewInvoice" class="w-2/3">
+          </div>
+          <div class="mb-3 w-full flex flex-wrap items-center">
+            <label class="w-1/3 text-left pl-3">مبلغ فاکتور</label>
+            <input type="text" v-model="newInvoice.amount" v-on:keyup.enter="addNewInvoice" class="w-2/3">
+          </div>
         </div>
-        <div class="mb-3 w-full flex flex-wrap items-center">
-          <label class="w-1/3 text-left pl-3">تاریخ فاکتور</label>
-          <input type="text" v-model="newInvoice.date" v-on:keyup.enter="addNewInvoice" class="w-2/3">
-        </div>
-        <div class="mb-3 w-full flex flex-wrap items-center">
-          <label class="w-1/3 text-left pl-3">مبلغ فاکتور</label>
-          <input type="text" v-model="newInvoice.amount" v-on:keyup.enter="addNewInvoice" class="w-2/3">
-        </div>
-        <div class="w-full text-white rounded px-3 py-2 bg-blue-400 text-sm text-center">
-          {{ invoices.length }} عدد با مجموع {{ totalAmountOfInvoices }} ریال
+        <div class="w-full px-3 py-5 mt-5 text-sm text-center border-t-2 border-gray-200">
+          <a class="ml-3" v-on:click="readInvoicesFromClipBoard">خواندن محتوای کپی شده</a>
+          <a class="mr-3">مشاهده</a>
+          <div class="mt-5">{{ invoices.length }} عدد با مجموع {{ totalAmountOfInvoices }} ریال</div>
         </div>
       </div>
-      <div class="w-1/2 flex flex-wrap pr-4">
-        <div class="mb-3 w-full flex flex-wrap items-center">
-          <label class="w-1/3 text-left pl-3">شماره چک</label>
-          <input type="text" v-model="newCheck.number" v-on:keyup.enter="addNewCheck" class="w-2/3">
+      <div class="w-1/2 pr-4">
+        <div>
+          <div class="mb-3 w-full flex flex-wrap items-center">
+            <label class="w-1/3 text-left pl-3">شماره چک</label>
+            <input type="text" v-model="newCheck.number" v-on:keyup.enter="addNewCheck" class="w-2/3">
+          </div>
+          <div class="mb-3 w-full flex flex-wrap items-center">
+            <label class="w-1/3 text-left pl-3">تاریخ سررسید</label>
+            <input type="text" v-model="newCheck.date" v-on:keyup.enter="addNewCheck" class="w-2/3">
+          </div>
+          <div class="mb-3 w-full flex flex-wrap items-center">
+            <label class="w-1/3 text-left pl-3">مبلغ چک</label>
+            <input type="text" v-model="newCheck.amount" v-on:keyup.enter="addNewCheck" class="w-2/3">
+          </div>
         </div>
-        <div class="mb-3 w-full flex flex-wrap items-center">
-          <label class="w-1/3 text-left pl-3">تاریخ سررسید</label>
-          <input type="text" v-model="newCheck.date" v-on:keyup.enter="addNewCheck" class="w-2/3">
-        </div>
-        <div class="mb-3 w-full flex flex-wrap items-center">
-          <label class="w-1/3 text-left pl-3">مبلغ چک</label>
-          <input type="text" v-model="newCheck.amount" v-on:keyup.enter="addNewCheck" class="w-2/3">
-        </div>
-        <div class="w-full text-white rounded px-3 py-2 bg-blue-400 text-sm text-center">
-          {{ checks.length }} عدد با مجموع {{ totalAmountOfChecks }} ریال
+        <div class="w-full px-3 py-5 mt-5 text-sm text-center border-t-2 border-gray-200">
+          <a class="ml-3" v-on:click="readChecksFromClipBoard">خواندن محتوای کپی شده</a>
+          <a class="mr-3">مشاهده</a>
+          <div class="mt-5">{{ checks.length }} عدد با مجموع {{ totalAmountOfChecks }} ریال</div>
         </div>
       </div>
     </div>
-    <div class="flex mt-5">
-      <button class="text-white bg-green-500 px-3 py-2 rounded w-1/5 ml-2 rounded-full" v-on:click="calculate">محاسبه</button>
-      <div class="border-4 border-green-200 px-3 py-2 w-3/5 text-center rounded-full font-bold">راس چک: {{ result }}</div>
-      <button class="text-white bg-red-500 px-3 py-2 rounded w-1/5 mr-2 rounded-full" v-on:click="reset">دوباره</button>
+    <div class="mt-5">
+      <button class="text-white bg-blue-400 px-10 py-3 block mx-auto rounded rounded-full" v-on:click="calculate">محاسبه</button>
+      <div class="px-3 pt-3 pb-1 block text-2xl text-center text-blue-900 rounded-full font-bold">راس چک: {{ result }}</div>
+      <a class="block text-center text-blue-400" v-on:click="reset">دوباره</button>
     </div>
   </div>
   

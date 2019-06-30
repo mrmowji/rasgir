@@ -1,4 +1,6 @@
-let v = new Vue({
+persianDate.toLocale('en');
+
+let app = new Vue({
   el: "#app",
   data: {
     invoices: [],
@@ -13,7 +15,12 @@ let v = new Vue({
       number: "",
       amount: 0,
     },
-    result: null,
+    batchInvoices: "",
+    result: "نامشخص",
+    invoicesInputMode: 0,
+    checksInputMode: 0,
+  },
+  watch: {
   },
   computed: {
     sortedInvoices: function() {  
@@ -50,6 +57,71 @@ let v = new Vue({
     },
   },
   methods: {
+    readChecksFromClipBoard: function() {
+    },
+    readInvoicesFromClipBoard: async function() {
+      let rows = await navigator.clipboard.readText();
+      rows = rows.split(/\r\n|\n|\r/);
+      console.log(rows);
+      for (let row of rows) {
+        if (row == "") {
+          continue;
+        }
+        console.log(row);
+        console.log('here');
+        var columns = row.split(/\t/);
+        console.log(columns);
+        if (columns.length != 3) {
+          continue;
+        }
+        console.log('here2');
+        if (columns[1] == "" || columns[2] == "") {
+          continue;
+        }
+        console.log('here3');
+        let number = this.normalizeNumber(columns[0]);
+        let date = this.normalizeDate(columns[1]);
+        let amount = this.normalizeAmount(columns[2]);
+        console.log(number  + " " + date + " " + amount);
+        console.log('here4');
+        if (date == null || amount == null) {
+          continue;
+        }
+        console.log('here5');
+        this.invoices.push({
+          number: number,
+          date: date,
+          amount: amount
+        });
+        console.log(columns);
+      }
+    },
+    normalizeNumber: function(number) {
+      if (/^[0-9]+$/.test(number)) {
+        return number;
+      }
+      return null;
+    },
+    normalizeDate: function(date) {
+      if (! /^[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}$/.test(date)) {
+        return null;
+      }
+      let dateArray = date.split("/").map(i => parseInt(i));
+      let actualDateArray = new persianDate(dateArray).toArray();
+      if (dateArray[0] != actualDateArray[0] ||
+        dateArray[1] != actualDateArray[1] ||
+        dateArray[2] != actualDateArray[2]) {
+          // TODO: alert user
+      }
+      return new persianDate(dateArray).format("YYYY/MM/DD");
+    },
+    normalizeAmount: function(amount) {
+      let amountWithoutDelimiter = amount.replace(/,|\//g, "");
+      if (/^[0-9]+$/.test(amountWithoutDelimiter)) {
+        return amountWithoutDelimiter;
+      }
+      return null;
+    },
     addNewInvoice: function() {
       let dateArray = this.newInvoice.date.split("/").map(i => parseInt(i));
       let actualDateArray = new persianDate(dateArray).toArray();
