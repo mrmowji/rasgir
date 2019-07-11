@@ -74,6 +74,9 @@ function getAmount(amount) {
 }
 
 function getFormattedAmount(number) {
+  if (number === "") {
+    return "";
+  }
   return Number(`${number}`.replace(/\D/g, "")).toLocaleString();
 }
 
@@ -101,9 +104,9 @@ function getFormattedPersianDate(date) {
 Vue.component('money-document-editor', {
   props: ['document'],
   template: '<div class="w-full flex flex-wrap text-center">' + 
-    '<div class="w-1/3"><input v-on:paste="$emit(\'paste\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full"></div>' + 
-    '<div class="px-2 w-1/3"><input v-on:paste="$emit(\'paste\')" type="text" v-on:keydown.enter="$emit(\'calculate\')" v-model="document.date" class="w-full" :class="{ \'input-with-error\': document.getDateStatus().messageType == MESSAGE_TYPES.ERROR, \'input-with-warning\': document.getDateStatus().messageType == MESSAGE_TYPES.WARNING, \'input-with-info\': document.getDateStatus().messageType == MESSAGE_TYPES.INFO }"></div>' + 
-    '<div class="w-1/3 mb-2"><input type="text" v-model="document.formattedAmount" class="w-full" v-on:keydown.tab="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" placeholder="ریال"></div></div>',
+    '<div class="w-1/3"><input v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full"></div>' + 
+    '<div class="px-2 w-1/3"><input v-on:focus="$emit(\'add-new\')" type="text" v-on:keydown.enter="$emit(\'calculate\')" v-model="document.date" class="w-full" :class="\'input-with-\' + document.getDateStatus().messageType"></div>' + 
+    '<div class="w-1/3 mb-2"><input type="text" v-model="document.formattedAmount" class="w-full" v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" :class="\'input-with-\' + document.getAmountStatus().messageType"></div></div>',
   /*template: '<div class="w-full flex flex-wrap text-center">' + 
     '<div class="px-1 w-1/3"><input v-on:paste="$emit(\'paste\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full" v-on:paste="$emit(\'paste\', $event)"></div>' + 
     '<div class="px-1 w-1/3"><input v-on:paste="$emit(\'paste\')" type="text" v-on:keydown.enter="$emit(\'calculate\')" v-model="document.date" class="w-full" :class="{ \'input-with-error\': document.getDateStatus().messageType == MESSAGE_TYPES.ERROR, \'input-with-warning\': document.getDateStatus().messageType == MESSAGE_TYPES.WARNING, \'input-with-info\': document.getDateStatus().messageType == MESSAGE_TYPES.INFO }" v-on:paste="$emit(\'paste\', $event)"></div>' + 
@@ -111,6 +114,7 @@ Vue.component('money-document-editor', {
   watch: {
     document: {
       handler(newValue) {
+        console.log(newValue);
         this.document.formattedAmount = getFormattedAmount(newValue.formattedAmount);
         if (this.document.formattedAmount != "") {
           this.document.amount = getAmount(this.document.formattedAmount);
@@ -132,6 +136,10 @@ let app = new Vue({
     invoicesInputMode: INPUT_MODES.NORMAL,
     checksInputMode: INPUT_MODES.NORMAL,
   },
+  mounted: function() {
+    this.addNewCheck();
+    this.addNewInvoice();
+  },
   computed: {
     sortedInvoices: function() {  
       return this.sortDocuments(this.invoices);
@@ -140,6 +148,7 @@ let app = new Vue({
       return this.sortDocuments(this.checks);
     },
     formattedTotalAmountOfInvoices: function() {
+      console.log(getFormattedAmount(0));
       return getFormattedAmount(this.getTotalAmountOfValidDocuments(this.invoices));
     },
     formattedTotalAmountOfChecks: function() {
@@ -204,7 +213,7 @@ let app = new Vue({
         console.log(this.sortedChecks[i].result);
       }
 
-      this.result = sum / this.sortedChecks.length;
+      this.result = (sum / this.sortedChecks.length).toFixed(2);
     },
     pasteChecks: async function() {
       let checks = await this.getDocumentsFromClipboard();
@@ -330,12 +339,21 @@ let app = new Vue({
     },
     getDefaultDocument: function() {
       return {
-        date: getFormattedPersianDate(new persianDate()),
+        date: "",
         number: "",
         formattedAmount: "",
         amount: 0,
         isValid: function() {
           return !Number.isNaN(parseFloat(this.amount)) && this.formattedAmount != "" && this.getDateStatus().isValid;
+        },
+        getAmountStatus: function() {
+          let result = { isValid: true };
+          if (this.formattedAmount === "") {
+            result.messageContent = "مبلغ، الزامی است!";
+            result.messageType = MESSAGE_TYPES.ERROR;
+            result.isValid = false;
+          }
+          return result;
         },
       };
     },
