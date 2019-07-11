@@ -32,6 +32,7 @@ let holidays = [
   "1398/10/20",
   "1398/10/27",
   "1398/11/04",
+  "1398/11/09",
   "1398/11/11",
   "1398/11/18",
   "1398/11/22",
@@ -353,13 +354,13 @@ let app = new Vue({
         } else if (status.day() == 7) {
           result.messageContent = "روز انتخابی، جمعه است!";
           result.messageType = MESSAGE_TYPES.WARNING;
-          result.isValid = false;
+          result.isValid = true;
         } else {
           for (let i = 0; i < holidays.length; i++) {
             if (holidays[i] == status.format("YYYY/MM/DD")) {
               result.messageContent = "روز انتخابی، تعطیل است!";
               result.messageType = MESSAGE_TYPES.WARNING;
-              result.isValid = false;
+              result.isValid = true;
               break;
             }
           }
