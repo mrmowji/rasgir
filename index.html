@@ -31,13 +31,9 @@
             <money-document-editor v-for="(invoice, invoiceIndex) in invoices"
               v-bind:document="invoice"
               v-on:add-new="invoiceIndex == (invoices.length - 1) ? addNewInvoice() : ''"
-              v-on:calculate="calculate()">
+              v-on:calculate="calculate()"
+              ref="invoice">
             </money-document-editor>
-            <div v-if="invoices.length == 0" class="text-sm p-5 bg-gray-100 rounded text-center text-blue-800">
-              در حال حاضر، هیچ فاکتوری ثبت نشده است.<br>
-              برای شروع بر روی دکمه‌ی <strong>جدید</strong> کلیک کنید<br>
-              و یا ستون‌های کپی‌شده را به صفحه اضافه کنید.
-            </div>
             <div class="flex">
               <div class="w-full">
                 <button type="button" class="w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2  rounded mt-3 hover:bg-blue-600 text-sm"
@@ -51,18 +47,14 @@
             <money-document-editor v-for="(check, checkIndex) in checks"
               v-bind:document="check"
               v-on:add-new="checkIndex == (checks.length - 1) ? addNewCheck() : ''"
-              v-on:calculate="calculate()">
+              v-on:calculate="calculate()"
+              ref="check">
             </money-document-editor>
-            <div v-if="checks.length == 0" class="text-sm p-5 bg-gray-100 rounded text-center text-blue-800">
-                در حال حاضر، هیچ چکی ثبت نشده است.<br>
-                برای شروع بر روی دکمه‌ی <strong>جدید</strong> کلیک کنید<br>
-              و یا ستون‌های کپی‌شده را به صفحه اضافه کنید.
+            <div class="flex">
+              <div class="w-full">
+                <button type="button" class="w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2  rounded mt-3 hover:bg-blue-600 text-sm"
+                  v-on:click="pasteChecks">درج متن کپی‌شده</button>
               </div>
-              <div class="flex">
-                <div class="w-full">
-                  <button type="button" class="w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2  rounded mt-3 hover:bg-blue-600 text-sm"
-                    v-on:click="pasteChecks">درج متن کپی‌شده</button>
-                </div>
             </div>
           </div>
         </div>

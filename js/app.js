@@ -125,7 +125,7 @@ Vue.component('money-document-editor', {
   },
   computed: { },
   methods: { }
-})
+});
 
 let app = new Vue({
   el: "#app",
@@ -178,7 +178,7 @@ let app = new Vue({
           checkDate = new persianDate();
           console.log("Switched to present day!");
         }
-        let daysInBetween = invoiceDate.diff(checkDate, 'days') + 1;
+        let daysInBetween = invoiceDate.diff(checkDate, 'days');
         console.log("Days in between: " + daysInBetween);
         console.log("Invoice " + invoicesIndex + ": " + this.sortedInvoices[invoicesIndex].unassignedAmount);
         console.log("Check " + checksIndex + ": " + this.sortedChecks[checksIndex].unassignedAmount);
@@ -220,12 +220,22 @@ let app = new Vue({
       for (let i = 0; i < checks.length; i++) {
         this.addNewCheck(checks[i]);
       }
+      this.$nextTick(() => {
+        let index = this.checks.length - 1;
+        let input = this.$refs.check[index];
+        input.$el.querySelector("input").focus();
+     });
     },
     pasteInvoices: async function() {
       let invoices = await this.getDocumentsFromClipboard();
       for (let i = 0; i < invoices.length; i++) {
         this.addNewInvoice(invoices[i]);
       }
+      this.$nextTick(() => {
+        let index = this.invoices.length - 1;
+        let input = this.$refs.invoice[index];
+        input.$el.querySelector("input").focus();
+     });
     },
     getDocumentsFromClipboard: async function() {
       let pastedData = "";
