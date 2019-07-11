@@ -32,6 +32,7 @@
               v-bind:document="invoice"
               v-on:add-new="invoiceIndex == (invoices.length - 1) ? addNewInvoice() : ''"
               v-on:calculate="calculate()"
+              v-on:delete="deleteInvoice(invoiceIndex)"
               ref="invoice">
             </money-document-editor>
             <div class="flex">
@@ -48,6 +49,7 @@
               v-bind:document="check"
               v-on:add-new="checkIndex == (checks.length - 1) ? addNewCheck() : ''"
               v-on:calculate="calculate()"
+              v-on:delete="deleteCheck(checkIndex)"
               ref="check">
             </money-document-editor>
             <div class="flex">
