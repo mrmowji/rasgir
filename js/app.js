@@ -217,6 +217,15 @@ let app = new Vue({
     },
     pasteChecks: async function() {
       let checks = await this.getDocumentsFromClipboard();
+      if (checks.length > 0) {
+        for (let i = this.checks.length - 1; i >= 0; i--) {
+          if (this.checks[i].isEmpty()) {
+            this.checks.pop();
+          } else {
+            break;
+          }
+        }
+      }
       for (let i = 0; i < checks.length; i++) {
         this.addNewCheck(checks[i]);
       }
@@ -228,6 +237,15 @@ let app = new Vue({
     },
     pasteInvoices: async function() {
       let invoices = await this.getDocumentsFromClipboard();
+      if (invoices.length > 0) {
+        for (let i = this.invoices.length - 1; i >= 0; i--) {
+          if (this.invoices[i].isEmpty()) {
+            this.invoices.pop();
+          } else {
+            break;
+          }
+        }
+      }
       for (let i = 0; i < invoices.length; i++) {
         this.addNewInvoice(invoices[i]);
       }
@@ -238,6 +256,8 @@ let app = new Vue({
      });
     },
     getDocumentsFromClipboard: async function() {
+      console.log("-------------------------------------------");
+      console.log("Getting documents from clipboard started.");
       let pastedData = "";
       let documents = [];
       await navigator.clipboard.readText().then(text => { pastedData = text; });
@@ -262,23 +282,24 @@ let app = new Vue({
           console.log("Empty date or amount!");
           continue;
         }
-        let number = getNumber(columns[0]);
-        let date = columns[1];
-        let formattedAmount = getFormattedAmount(columns[2]);
-        let amount = getAmount(formattedAmount);
-        console.log("Extracted data: " + number  + " " + date + " " + formattedAmount);
-        if (date == null || formattedAmount == null) {
+        let document = this.getDefaultDocument();
+        document.number = getNumber(columns[0]);
+        document.date = columns[1];
+        document.formattedAmount = getFormattedAmount(columns[2]);
+        document.amount = getAmount(document.formattedAmount);
+        //console.log("Extracted data: " + number  + " " + date + " " + formattedAmount);
+        if (document.date == null || document.formattedAmount == null) {
           console.log("Null date or amount!");
           continue;
         }
-        documents.push({
-          number: number,
-          date: date,
-          formattedAmount: formattedAmount,
-          amount: amount,
-        });
-        console.log("Added!");
+        if (!document.isEmpty()) {
+          documents.push(document);
+          console.log("Added!");
+        }
       }
+      console.log(documents.length + " rows got from clipboard!");
+      console.log("Getting documents from clipboard ended.");
+      console.log("-------------------------------------------");
       return documents;
     },
     sortDocuments: function(documents) {
@@ -364,6 +385,12 @@ let app = new Vue({
             result.isValid = false;
           }
           return result;
+        },
+        isEmpty: function() {
+          if (this.date == "" && this.number == "" && this.formattedAmount == "") {
+            return true;
+          }
+          return false;
         },
       };
     },
