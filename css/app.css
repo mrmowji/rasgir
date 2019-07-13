@@ -737,6 +737,26 @@ ul {
   border-color: #faf089;
 }
 
+.tab-header {
+  color: #a0aec0;
+}
+
+.selected-tab-header {
+  color: #2a4365;
+  background-color: #edf2f7;
+}
+
+@media (min-width: 768px) {
+  .tab-header {
+    color: #2a4365;
+  }
+
+  .selected-tab-header {
+    color: #2a4365;
+    background-color: #fff;
+  }
+}
+
 .appearance-none {
   -webkit-appearance: none;
      -moz-appearance: none;

@@ -57,6 +57,11 @@ let INPUT_MODES = {
   PASTE: "paste",
 };
 
+let TABS = {
+  INVOICES: "invoices",
+  CHECKS: "checks",
+};
+
 persianDate.toLocale('en');
 
 function getNumber(number) {
@@ -136,6 +141,7 @@ let app = new Vue({
     result: "نامشخص",
     invoicesInputMode: INPUT_MODES.NORMAL,
     checksInputMode: INPUT_MODES.NORMAL,
+    selectedTab: TABS.INVOICES,
   },
   mounted: function() {
     this.addNewCheck();
@@ -418,6 +424,9 @@ let app = new Vue({
           return false;
         },
       };
+    },
+    changeTab: function(tab) {
+      this.selectedTab = tab;
     },
   },
 });

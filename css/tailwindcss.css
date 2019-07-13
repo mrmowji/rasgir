@@ -87,6 +87,24 @@ ul {
   @apply border-yellow-300;
 }
 
+.tab-header {
+  @apply text-gray-500;
+}
+
+.selected-tab-header {
+  @apply text-blue-900 bg-gray-200;
+}
+
+@screen md {
+  .tab-header {
+    @apply text-blue-900;
+  }
+  
+  .selected-tab-header {
+    @apply text-blue-900 bg-white;
+  }
+}
+
 @tailwind utilities;
 
 @font-face {

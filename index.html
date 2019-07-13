@@ -9,24 +9,30 @@
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body class="h-full">
-  <div id="app" style="width: 800px; max-width: 100%; height: 100%;" class="mx-auto pt-5">
+  <div id="app" style="width: 800px; max-width: 100%; height: 100%;" class="mx-auto">
+    <div class="flex border-gray-200 border-b-2 mb-4 md:mx-5">
+      <div class="w-1/2 px-5 py-4 text-center pl-4 tab-header cursor-pointer md:cursor-auto"
+        v-on:click="changeTab(TABS.INVOICES)"
+        :class="{ 'selected-tab-header': selectedTab == TABS.INVOICES }">فاکتورها</div>
+      <div class="w-1/2 px-5 py-4 text-center pr-4 tab-header cursor-pointer md:cursor-auto"
+        v-on:click="changeTab(TABS.CHECKS)"
+        :class="{ 'selected-tab-header': selectedTab == TABS.CHECKS }">چک‌ها</div>
+    </div>
     <div class="flex px-5">
-      <div class="w-1/2 flex flex-wrap text-center pl-4">
-        <div class="w-full text-lg text-blue-900 font-bold pb-2 mb-2 border-gray-200 border-b-2">فاکتورها</div>
+      <div class="w-full md:w-1/2 flex flex-wrap text-center md:pl-4">
         <div class="w-1/3 text-sm text-gray-500">شماره</div>
         <div class="w-1/3 text-sm text-gray-500">تاریخ</div>
         <div class="w-1/3 text-sm text-gray-500">مبلغ<span class="text-xs mr-1">(ریال)</span></div>
       </div>
-      <div class="w-1/2 flex flex-wrap text-center pr-4">
-        <div class="w-full text-lg text-blue-900 font-bold pb-2 mb-2 border-gray-200 border-b-2">چک‌ها</div>
+      <div class="hidden md:flex w-1/2 flex-wrap text-center pr-4">
         <div class="w-1/3 text-sm text-gray-500">شماره</div>
         <div class="w-1/3 text-sm text-gray-500">تاریخ</div>
         <div class="w-1/3 text-sm text-gray-500">مبلغ<span class="text-xs mr-1">(ریال)</span></div>
       </div>
     </div>
-    <div class="fixed left-0 right-0 mx-auto px-5" style="bottom: 140px;top: 100px;width: 800px; max-width: 100%; overflow-y: overlay">
+    <div class="fixed left-0 right-0 mx-auto px-5" style="bottom: 140px;top: 110px;width: 800px; max-width: 100%; overflow-y: overlay">
       <div class="flex">
-        <div class="w-1/2 pl-4">
+        <div class="w-full md:w-1/2 md:pl-4 pl-0 md:block" :class="{ 'hidden': selectedTab != TABS.INVOICES }">
           <div>
             <money-document-editor v-for="(invoice, invoiceIndex) in invoices"
               v-bind:document="invoice"
@@ -43,7 +49,7 @@
             </div>
           </div>
         </div>
-        <div class="w-1/2 pr-4">
+        <div class="w-full md:block md:w-1/2 md:pr-4 md:block" :class="{ 'hidden': selectedTab != TABS.CHECKS }">
           <div>
             <money-document-editor v-for="(check, checkIndex) in checks"
               v-bind:document="check"
