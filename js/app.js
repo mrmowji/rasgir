@@ -109,8 +109,8 @@ function getFormattedPersianDate(date) {
 
 Vue.component('money-document-editor', {
   props: ['document'],
-  template: '<div class="w-full flex items-center mb-2 flex-wrap text-center"><span class="w-1/12" v-on:click="$emit(\'delete\')"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="fill-current text-gray-500 cursor-pointer hover:text-gray-700 w-4 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></span>' + 
-    '<div class="w-3/12 pr-2"><input v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full"></div>' + 
+  template: '<div class="w-full flex items-center mb-2 flex-wrap text-center"><span class="flex-shrink print:hidden" v-on:click="$emit(\'delete\')"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="fill-current text-gray-500 cursor-pointer hover:text-gray-700 w-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></span>' + 
+    '<div class="w-3/12 pr-2 flex-grow"><input v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full"></div>' + 
     '<div class="px-2 w-4/12"><input v-on:focus="$emit(\'add-new\')" type="text" v-on:keydown.enter="$emit(\'calculate\')" v-model="document.date" class="w-full" :class="\'input-with-\' + document.getDateStatus().messageType"></div>' + 
     '<div class="w-4/12"><input type="text" v-model="document.formattedAmount" class="w-full" v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" :class="\'input-with-\' + document.getAmountStatus().messageType"></div></div>',
   /*template: '<div class="w-full flex flex-wrap text-center">' + 
@@ -139,9 +139,13 @@ let app = new Vue({
     invoices: [],
     checks: [],
     result: "نامشخص",
+    sumOfUnassignedInvoices: 0,
+    sumOfUnassignedChecks: 0,
     invoicesInputMode: INPUT_MODES.NORMAL,
     checksInputMode: INPUT_MODES.NORMAL,
     selectedTab: TABS.INVOICES,
+    isAboutModalVisible: false,
+    isHelpModalVisible: false,
   },
   mounted: function() {
     this.addNewCheck();
@@ -211,6 +215,15 @@ let app = new Vue({
           checksIndex++;
           invoicesIndex++;
         }
+      }
+      console.log(checksIndex, this.sortedChecks.length, invoicesIndex, this.sortedInvoices.length);
+      this.sumOfUnassignedChecks = 0;
+      this.sumOfUnassignedInvoices = 0;
+      for (let i = checksIndex; i < this.sortedChecks.length; i++) {
+        this.sumOfUnassignedChecks += this.sortedChecks[i].unassignedAmount;
+      }
+      for (let i = invoicesIndex; i < this.sortedInvoices.length; i++) {
+        this.sumOfUnassignedInvoices += this.sortedInvoices[i].unassignedAmount;
       }
       console.log("Here");
       let sum = 0;

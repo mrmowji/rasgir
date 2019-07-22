@@ -95,6 +95,35 @@ ul {
   @apply text-blue-900 bg-gray-200;
 }
 
+.modal {
+  @apply z-10 flex fixed inset-0 items-center justify-center;
+  background: rgba(0,0,0,0.3);
+}
+
+.modal-visible {
+  @apply flex;
+}
+
+.modal-wrapper {
+  @apply bg-white shadow-lg rounded-lg;
+  max-width: 90%;
+  width: 350px;
+}
+
+.modal-header {
+  @apply py-5 px-8 border-gray-200 border-b-2 font-bold text-lg flex justify-between items-center;
+}
+
+.modal-content {
+  @apply py-5 px-8;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+[v-cloak] {
+  @apply hidden;
+}
+
 @screen md {
   .tab-header {
     @apply text-blue-900;

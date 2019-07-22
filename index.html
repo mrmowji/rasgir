@@ -8,8 +8,8 @@
 
   <link rel="stylesheet" href="css/app.css">
 </head>
-<body class="h-full">
-  <div id="app" style="width: 800px; max-width: 100%; height: 100%;" class="mx-auto">
+<body class="h-full print:h-auto">
+  <div id="app" style="width: 800px; max-width: 100%;" class="h-full mx-auto print:my-12 print:h-auto">
     <div class="flex border-gray-200 border-b-2 mb-4 md:mx-5">
       <div class="w-1/2 px-5 py-4 text-center pl-4 tab-header cursor-pointer md:cursor-auto"
         v-on:click="changeTab(TABS.INVOICES)"
@@ -19,20 +19,20 @@
         :class="{ 'selected-tab-header': selectedTab == TABS.CHECKS }">چک‌ها</div>
     </div>
     <div class="flex px-5">
-      <div class="w-full md:w-1/2 flex flex-wrap text-center md:pl-4">
+      <div class="w-full md:w-1/2 print:w-1/2 print:pl-4 flex flex-wrap text-center md:pl-4">
         <div class="w-1/3 text-sm text-gray-500">شماره</div>
         <div class="w-1/3 text-sm text-gray-500">تاریخ</div>
         <div class="w-1/3 text-sm text-gray-500">مبلغ<span class="text-xs mr-1">(ریال)</span></div>
       </div>
-      <div class="hidden md:flex w-1/2 flex-wrap text-center pr-4">
+      <div class="hidden md:flex print:w-1/2 print:flex w-1/2 flex-wrap text-center pr-4">
         <div class="w-1/3 text-sm text-gray-500">شماره</div>
         <div class="w-1/3 text-sm text-gray-500">تاریخ</div>
         <div class="w-1/3 text-sm text-gray-500">مبلغ<span class="text-xs mr-1">(ریال)</span></div>
       </div>
     </div>
-    <div class="fixed left-0 right-0 mx-auto px-5" style="bottom: 140px;top: 110px;width: 800px; max-width: 100%; overflow-y: overlay">
+    <div class="fixed print:static left-0 right-0 mx-auto px-5" style="bottom: 140px;top: 110px;width: 800px; max-width: 100%; overflow-y: overlay">
       <div class="flex">
-        <div class="w-full md:w-1/2 md:pl-4 pl-0 md:block" :class="{ 'hidden': selectedTab != TABS.INVOICES }">
+        <div class="w-full md:w-1/2 print:w-1/2 print:pl-4 md:pl-4 pl-0 md:block" :class="{ 'hidden': selectedTab != TABS.INVOICES }">
           <div>
             <money-document-editor v-for="(invoice, invoiceIndex) in invoices"
               v-bind:document="invoice"
@@ -43,13 +43,13 @@
             </money-document-editor>
             <div class="flex">
               <div class="w-full">
-                <button type="button" class="w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2  rounded mt-3 hover:bg-blue-600 text-sm"
+                <button type="button" class="print:hidden w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2 rounded mt-3 hover:bg-blue-600 text-sm"
                   v-on:click="pasteInvoices">درج متن کپی‌شده</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="w-full md:block md:w-1/2 md:pr-4 md:block" :class="{ 'hidden': selectedTab != TABS.CHECKS }">
+        <div class="w-full md:block print:block print:w-1/2 print:pr-4 md:w-1/2 md:pr-4 md:block" :class="{ 'hidden': selectedTab != TABS.CHECKS }">
           <div>
             <money-document-editor v-for="(check, checkIndex) in checks"
               v-bind:document="check"
@@ -60,7 +60,7 @@
             </money-document-editor>
             <div class="flex">
               <div class="w-full">
-                <button type="button" class="w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2  rounded mt-3 hover:bg-blue-600 text-sm"
+                <button type="button" class="print:hidden w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2  rounded mt-3 hover:bg-blue-600 text-sm"
                   v-on:click="pasteChecks">درج متن کپی‌شده</button>
               </div>
             </div>
@@ -68,17 +68,78 @@
         </div>
       </div>
     </div>
-    <div class="fixed bottom-0 left-0 right-0 bg-white p-5 border-gray-200 border-t-4 text-center">
-      <div class="w-1/5 inline-block">
-        <div class="text-xs text-gray-500">مجموع فاکتورها</div>
-        <div class="font-bold text-gray-600">{{ formattedTotalAmountOfInvoices }} ریال</div>
+    <div class="fixed print:static print:mt-5 bottom-0 left-0 right-0 bg-white p-5 border-gray-200 border-t-4 text-center flex justify-center items-center">
+      <div class="w-1/5">
+        <div class="text-xs text-gray-500 -mb-1">فاکتورها<span class="text-xs mr-1">(ریال)</span></div>
+        <div class="font-bold text-gray-600">{{ formattedTotalAmountOfInvoices }}</div>
+        <div class="text-xs text-gray-500 -mb-1 mt-2">مانده<span class="text-xs mr-1">(ریال)</span></div>
+        <div class="font-bold text-gray-600">{{ getFormattedAmount(sumOfUnassignedInvoices) }}</div>
       </div>
-      <div class="text-2xl text-center font-bold inline-block py-3 px-5 bg-green-500 text-white rounded-lg mx-5">
+      <div class="text-2xl text-center font-bold py-3 px-5 bg-green-500 text-white rounded-lg mx-5 cursor-pointer" v-on:click="calculate">
         <div class="text-xs text-green-200">راس چک</div>
         {{ result }}</div>
-      <div class="w-1/5 inline-block">
-        <div class="text-xs text-gray-500">مجموع چک‌ها</div>
-        <div class="font-bold text-gray-600">{{ formattedTotalAmountOfChecks }} ریال</div>
+      <div class="w-1/5">
+        <div class="text-xs text-gray-500 -mb-1">چک‌ها<span class="text-xs mr-1">(ریال)</span></div>
+        <div class="font-bold text-gray-600">{{ formattedTotalAmountOfChecks }}</div>
+        <div class="text-xs text-gray-500 -mb-1 mt-2">مانده<span class="text-xs mr-1">(ریال)</span></div>
+        <div class="font-bold text-gray-600">{{ getFormattedAmount(sumOfUnassignedChecks) }}</div>
+      </div>
+    </div>
+
+    <div class="modal" v-if="isAboutModalVisible" v-on:click.stop="isAboutModalVisible = false;" v-cloak>
+      <div class="modal-wrapper" v-on:click.stop="">
+        <div class="modal-header">
+          <div class="modal-title">
+            درباره‌ی ما
+          </div>
+          <div class="modal-action">
+            <svg v-on:click="isAboutModalVisible = false;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="fill-current text-gray-500 cursor-pointer hover:text-gray-700 w-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg>
+          </div>
+        </div>
+        <div class="modal-content">
+          برنامه‌ی تحت وب <strong>راس‌گیر</strong> به منظور ساده‌سازی فرآیند
+          محاسبه‌ی راس چک‌ها بر اساس فاکتورهای مربوطه توسعه یافته است. در حفظ آن کوشا باشید :دی
+
+          <div class="mt-3">
+            <div class="">
+              مشاور حسابدار: <strong>یلدا بهنیا</strong>
+            </div>
+            <div class="text-xs">
+              <a href="" class="ml-3">Twitter</a>
+              <a href="" class="ml-3">Instagram</a>
+              <a href="" class="ml-3">Github</a>
+              <a href="" class="ml-3">Dribbble</a>
+            </div>
+          </div>
+          
+          <div class="mt-3">
+            <div class="">
+              برنامه‌نویس و طراح: <strong>مجتبی جوان</strong>
+            </div>
+            <div class="text-xs">
+              <a href="" class="ml-3">Twitter</a>
+              <a href="" class="ml-3">Instagram</a>
+              <a href="" class="ml-3">Github</a>
+              <a href="" class="ml-3">Dribbble</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" v-if="isHelpModalVisible" v-on:click.stop="isHelpModalVisible = false;" v-cloak>
+      <div class="modal-wrapper" v-on:click.stop="">
+        <div class="modal-header">
+          <div class="modal-title">
+            راهنما
+          </div>
+          <div class="modal-action">
+            <svg v-on:click="isHelpModalVisible = false;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="fill-current text-gray-500 cursor-pointer hover:text-gray-700 w-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg>
+          </div>
+        </div>
+        <div class="modal-content">
+          
+        </div>
       </div>
     </div>
   </div>
