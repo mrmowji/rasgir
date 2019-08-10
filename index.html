@@ -33,37 +33,29 @@
     <div class="fixed print:static left-0 right-0 mx-auto px-5" style="bottom: 140px;top: 110px;width: 800px; max-width: 100%; overflow-y: overlay">
       <div class="flex">
         <div class="w-full md:w-1/2 print:w-1/2 print:pl-4 md:pl-4 pl-0 md:block" :class="{ 'hidden': selectedTab != TABS.INVOICES }">
-          <div>
+          <div id="invoices">
             <money-document-editor v-for="(invoice, invoiceIndex) in invoices"
               v-bind:document="invoice"
               v-on:add-new="invoiceIndex == (invoices.length - 1) ? addNewInvoice() : ''"
               v-on:calculate="calculate()"
               v-on:delete="deleteInvoice(invoiceIndex)"
+              v-on:focus="changeTab(TABS.INVOICES)"
+              v-on:paste="paste"
               ref="invoice">
             </money-document-editor>
-            <div class="flex">
-              <div class="w-full">
-                <button type="button" class="print:hidden w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2 rounded mt-3 hover:bg-blue-600 text-sm"
-                  v-on:click="pasteInvoices">درج متن کپی‌شده</button>
-              </div>
-            </div>
           </div>
         </div>
         <div class="w-full md:block print:block print:w-1/2 print:pr-4 md:w-1/2 md:pr-4 md:block" :class="{ 'hidden': selectedTab != TABS.CHECKS }">
-          <div>
+          <div id="checks">
             <money-document-editor v-for="(check, checkIndex) in checks"
               v-bind:document="check"
               v-on:add-new="checkIndex == (checks.length - 1) ? addNewCheck() : ''"
               v-on:calculate="calculate()"
               v-on:delete="deleteCheck(checkIndex)"
+              v-on:focus="changeTab(TABS.CHECKS)"
+              v-on:paste="paste"
               ref="check">
             </money-document-editor>
-            <div class="flex">
-              <div class="w-full">
-                <button type="button" class="print:hidden w-full border-4 border-blue-500 bg-blue-500 text-white px-4 py-2  rounded mt-3 hover:bg-blue-600 text-sm"
-                  v-on:click="pasteChecks">درج متن کپی‌شده</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

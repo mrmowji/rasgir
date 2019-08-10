@@ -1,3 +1,5 @@
+// کپی ستونی و سطری هر کدام از اطلاعات
+
 let holidays = [
   "1398/04/21",
   "1398/04/28",
@@ -110,9 +112,9 @@ function getFormattedPersianDate(date) {
 Vue.component('money-document-editor', {
   props: ['document'],
   template: '<div class="w-full flex items-center mb-2 flex-wrap text-center"><span class="flex-shrink print:hidden" v-on:click="$emit(\'delete\')"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="fill-current text-gray-500 cursor-pointer hover:text-gray-700 w-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></span>' + 
-    '<div class="w-3/12 pr-2 flex-grow"><input v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full"></div>' + 
-    '<div class="px-2 w-4/12"><input v-on:focus="$emit(\'add-new\')" type="text" v-on:keydown.enter="$emit(\'calculate\')" v-model="document.date" class="w-full" :class="\'input-with-\' + document.getDateStatus().messageType"></div>' + 
-    '<div class="w-4/12"><input type="text" v-model="document.formattedAmount" class="w-full" v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" :class="\'input-with-\' + document.getAmountStatus().messageType"></div></div>',
+    '<div class="w-3/12 pr-2 flex-grow"><input v-on:focus="$emit(\'focus\')" v-on:paste="$emit(\'paste\', $event, 0)" v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full"></div>' + 
+    '<div class="px-2 w-4/12"><input v-on:focus="$emit(\'focus\')" v-on:paste="$emit(\'paste\', $event, 1)" v-on:focus="$emit(\'add-new\')" type="text" v-on:keydown.enter="$emit(\'calculate\')" v-model="document.date" class="w-full" :class="\'input-with-\' + document.getDateStatus().messageType"></div>' + 
+    '<div class="w-4/12"><input v-on:focus="$emit(\'focus\')" v-on:paste="$emit(\'paste\', $event, 2)" type="text" v-model="document.formattedAmount" class="w-full" v-on:focus="$emit(\'add-new\')" v-on:keydown.enter="$emit(\'calculate\')" :class="\'input-with-\' + document.getAmountStatus().messageType"></div></div>',
   /*template: '<div class="w-full flex flex-wrap text-center">' + 
     '<div class="px-1 w-1/3"><input v-on:paste="$emit(\'paste\')" v-on:keydown.enter="$emit(\'calculate\')" type="text" v-model="document.number" class="w-full" v-on:paste="$emit(\'paste\', $event)"></div>' + 
     '<div class="px-1 w-1/3"><input v-on:paste="$emit(\'paste\')" type="text" v-on:keydown.enter="$emit(\'calculate\')" v-model="document.date" class="w-full" :class="{ \'input-with-error\': document.getDateStatus().messageType == MESSAGE_TYPES.ERROR, \'input-with-warning\': document.getDateStatus().messageType == MESSAGE_TYPES.WARNING, \'input-with-info\': document.getDateStatus().messageType == MESSAGE_TYPES.INFO }" v-on:paste="$emit(\'paste\', $event)"></div>' + 
@@ -129,8 +131,6 @@ Vue.component('money-document-editor', {
       deep: true
     },
   },
-  computed: { },
-  methods: { }
 });
 
 let app = new Vue({
@@ -235,8 +235,7 @@ let app = new Vue({
 
       this.result = (sum / this.sortedChecks.length).toFixed(2);
     },
-    pasteChecks: async function() {
-      let checks = await this.getDocumentsFromClipboard();
+    pasteChecks: function(checks) {
       if (checks.length > 0) {
         for (let i = this.checks.length - 1; i >= 0; i--) {
           if (this.checks[i].isEmpty()) {
@@ -253,10 +252,9 @@ let app = new Vue({
         let index = this.checks.length - 1;
         let input = this.$refs.check[index];
         input.$el.querySelector("input").focus();
-     });
+      });
     },
-    pasteInvoices: async function() {
-      let invoices = await this.getDocumentsFromClipboard();
+    pasteInvoices: function(invoices) {
       if (invoices.length > 0) {
         for (let i = this.invoices.length - 1; i >= 0; i--) {
           if (this.invoices[i].isEmpty()) {
@@ -273,17 +271,34 @@ let app = new Vue({
         let index = this.invoices.length - 1;
         let input = this.$refs.invoice[index];
         input.$el.querySelector("input").focus();
-     });
+      });
     },
-    getDocumentsFromClipboard: async function() {
-      console.log("-------------------------------------------");
-      console.log("Getting documents from clipboard started.");
-      let pastedData = "";
-      let documents = [];
-      await navigator.clipboard.readText().then(text => { pastedData = text; });
-      console.log("Pasted data: " + pastedData);
+    paste: function(event, column) {
+      let element = event.target;
+      let documentType = this.selectedTab;
+      let pastedData = (event.clipboardData || window.clipboardData).getData('text');
+
+      let invoices = [];
+      let checks = [];
+
       let rowsData = pastedData.trim();
       let rows = rowsData.split(/\r\n|\n|\r/);
+      console.log(rows);
+      if (rows.length > 1) {
+        console.log("prevented");
+        event.preventDefault();
+      } else {
+        console.log(rows[0].indexOf("\t"));
+        if (rows.length == 0) {
+          return;
+        } else if (rows[0].indexOf("\t") == -1) {
+          return;
+        } else {
+          console.log("prevented");
+          event.preventDefault();
+        }
+      }
+
       console.log(rows.length + " rows");
       console.log("Rows: " + rows);
       for (let row of rows) {
@@ -294,33 +309,56 @@ let app = new Vue({
         var columns = row.split(/\t/);
         console.log(columns.length + " columns");
         console.log("\tColumns: " + columns);
-        if (columns.length != 3) {
+        /*if (columns.length != 3) {
           console.log("Invalid number of columns!");
           continue;
         }
         if (columns[1] == "" || columns[2] == "") {
           console.log("Empty date or amount!");
           continue;
+        }*/
+        let firstDocument = this.getDefaultDocument();
+        if (column == 0) {
+          console.log("First Col");
+          if (columns.length > 0) {
+            console.log(columns[0]);
+            firstDocument.number = getNumber(columns[0]);
+          }
+          if (columns.length > 1) {
+            firstDocument.date = columns[1];
+          }
+          if (columns.length > 2) {
+            firstDocument.formattedAmount = getFormattedAmount(columns[2]);
+            firstDocument.amount = getAmount(firstDocument.formattedAmount);
+          }
+        } else if (column == 1) {
+          if (columns.length > 0) {
+            firstDocument.date = columns[0];
+          }
+          if (columns.length > 1) {
+            firstDocument.formattedAmount = getFormattedAmount(columns[1]);
+            firstDocument.amount = getAmount(firstDocument.formattedAmount);
+          }
+        } else if (column == 2) {
+          if (columns.length > 0) {
+            firstDocument.formattedAmount = getFormattedAmount(columns[0]);
+            firstDocument.amount = getAmount(firstDocument.formattedAmount);
+          }
         }
-        let document = this.getDefaultDocument();
-        document.number = getNumber(columns[0]);
-        document.date = columns[1];
-        document.formattedAmount = getFormattedAmount(columns[2]);
-        document.amount = getAmount(document.formattedAmount);
-        //console.log("Extracted data: " + number  + " " + date + " " + formattedAmount);
-        if (document.date == null || document.formattedAmount == null) {
-          console.log("Null date or amount!");
-          continue;
-        }
-        if (!document.isEmpty()) {
-          documents.push(document);
-          console.log("Added!");
+
+        if (documentType == TABS.INVOICES) {
+          console.log(firstDocument);
+          invoices.push(firstDocument);
+        } else if (documentType == TABS.CHECKS) {
+          checks.push(firstDocument);
         }
       }
-      console.log(documents.length + " rows got from clipboard!");
-      console.log("Getting documents from clipboard ended.");
-      console.log("-------------------------------------------");
-      return documents;
+      if (invoices.length > 0) {
+        this.pasteInvoices(invoices);
+      }
+      if (checks.length > 0) {
+        this.pasteChecks(checks);
+      }
     },
     sortDocuments: function(documents) {
       return documents.sort((a, b) => {
