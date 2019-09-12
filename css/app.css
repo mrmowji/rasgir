@@ -711,8 +711,9 @@ ul {
 }
 
 .input-with-error {
-  background-color: #fed7d7;
-  border-color: #fed7d7;
+  background-color: #f56565;
+  border-color: #f56565;
+  color: #fff;
 }
 
 .input-with-error:focus {
@@ -720,8 +721,9 @@ ul {
 }
 
 .input-with-warning {
-  background-color: #feebc8;
-  border-color: #feebc8;
+  background-color: #f6ad55;
+  border-color: #f6ad55;
+  color: #fff;
 }
 
 .input-with-warning:focus {
