@@ -32,9 +32,12 @@
         <div class="w-4/12 text-sm text-gray-500">مبلغ<span class="text-xs mr-1">(ریال)</span></div>
       </div>
     </div>
-    <div class="fixed print:static left-0 right-0 mx-auto px-5" style="bottom: 140px;top: 110px;width: 800px; max-width: 100%;">
-      <div class="flex h-full">
-        <div style="overflow-y: overlay" class="w-full h-full md:w-1/2 print:w-1/2 print:pl-4 md:pl-4 pl-0 md:block print:block" :class="{ 'hidden': selectedTab != TABS.INVOICES }">
+    <div class="fixed print:static left-0 right-0 mx-auto" style="bottom: 140px;top: 110px;width: 800px; max-width: 100%;">
+      <div class="flex h-full px-6" :class="{ 'overflow-y-auto': isFocuedOnBothSides }" v-on:click="isFocuedOnBothSides = true;">
+        <div :class="{ 'overflow-y-auto': !isFocuedOnBothSides }"
+          class="w-full h-full md:w-1/2 print:w-1/2 print:pl-4 md:pl-4 pl-0 md:block print:block"
+          :class="{ 'hidden': selectedTab != TABS.INVOICES }"
+          v-on:click.stop="isFocuedOnBothSides = false;">
           <div id="invoices">
             <money-document-editor v-for="(invoice, invoiceIndex) in invoices"
               v-bind:document="invoice"
@@ -47,7 +50,8 @@
             </money-document-editor>
           </div>
         </div>
-        <div style="overflow-y: overlay" class="w-full h-full md:block print:block print:w-1/2 print:pr-4 md:w-1/2 md:pr-4 md:block print:block" :class="{ 'hidden': selectedTab != TABS.CHECKS }">
+        <div :class="{ 'overflow-y-auto': !isFocuedOnBothSides }" class="w-full h-full md:block print:block print:w-1/2 print:pr-4 md:w-1/2 md:pr-4 md:block print:block" :class="{ 'hidden': selectedTab != TABS.CHECKS }"
+          v-on:click.stop="isFocuedOnBothSides = false;">
           <div id="checks">
             <money-document-editor v-for="(check, checkIndex) in checks"
               v-bind:document="check"

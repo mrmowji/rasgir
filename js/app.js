@@ -1,5 +1,3 @@
-// کپی ستونی و سطری هر کدام از اطلاعات
-
 let holidays = [
   "1398/04/21",
   "1398/04/28",
@@ -146,6 +144,7 @@ let app = new Vue({
     selectedTab: TABS.INVOICES,
     isAboutModalVisible: false,
     isHelpModalVisible: false,
+    isFocuedOnBothSides: false,
   },
   mounted: function() {
     this.addNewCheck();
