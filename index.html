@@ -32,8 +32,8 @@
         <div class="w-4/12 text-sm text-gray-500">مبلغ<span class="text-xs mr-1">(ریال)</span></div>
       </div>
     </div>
-    <div class="fixed print:static left-0 right-0 mx-auto" style="bottom: 140px;top: 110px;width: 800px; max-width: 100%;">
-      <div class="flex h-full px-6" :class="{ 'overflow-y-auto': isFocuedOnBothSides }" v-on:click="isFocuedOnBothSides = true;">
+    <div class="fixed print:static left-0 right-0 mx-auto" style="bottom: 140px;top: 110px;" v-on:click="isFocuedOnBothSides = true;" :class="{ 'overflow-y-auto': isFocuedOnBothSides }">
+      <div style="width: 800px; max-width: 100%;" class="flex h-full px-6 mx-auto" v-on:click="isFocuedOnBothSides = true;">
         <div :class="{ 'overflow-y-auto': !isFocuedOnBothSides, 'hidden': selectedTab != TABS.INVOICES }"
           class="w-full h-full md:w-1/2 print:w-1/2 print:pl-4 md:pl-4 pl-0 md:block print:block"
           v-on:click.stop="isFocuedOnBothSides = false;">
