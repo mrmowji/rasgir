@@ -661,6 +661,12 @@ h2 {
   margin-top: 1.25rem;
 }
 
+h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
 input {
   outline: 0;
   background-color: #edf2f7;
@@ -788,6 +794,7 @@ ul {
   padding-bottom: 1.25rem;
   padding-left: 2rem;
   padding-right: 2rem;
+  font-size: 0.875rem;
   max-height: 350px;
   overflow-y: auto;
 }

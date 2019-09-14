@@ -87,39 +87,28 @@
     <div class="modal" v-if="isAboutModalVisible" v-on:click.stop="isAboutModalVisible = false;" v-cloak>
       <div class="modal-wrapper" v-on:click.stop="">
         <div class="modal-header">
-          <div class="modal-title">
+          <h2 class="modal-title">
             درباره‌ی ما
-          </div>
+          </h2>
           <div class="modal-action">
             <svg v-on:click="isAboutModalVisible = false;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="fill-current text-gray-500 cursor-pointer hover:text-gray-700 w-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg>
           </div>
         </div>
         <div class="modal-content">
-          برنامه‌ی تحت وب <strong>راس‌گیر</strong> به منظور ساده‌سازی فرآیند
-          محاسبه‌ی راس چک‌ها بر اساس فاکتورهای مربوطه توسعه یافته است. در حفظ آن کوشا باشید :دی
+          <strong>شرکت ایده‌پردازی نوین پاندا (پاندای خلاق)</strong>
+          از سال 1395 با تمرکز بر روی تولید نرم‌افزارهای تحت وب (وبسایت، اپلیکیشن و ...)
+          فعالیت خود را آغاز نمود.
 
           <div class="mt-3">
-            <div class="">
-              مشاور حسابدار: <strong>یلدا بهنیا</strong>
-            </div>
-            <div class="text-xs">
-              <a href="" class="ml-3">Twitter</a>
-              <a href="" class="ml-3">Instagram</a>
-              <a href="" class="ml-3">Github</a>
-              <a href="" class="ml-3">Dribbble</a>
-            </div>
+            <span class="text-xs">تلفن تماس</span>
+            <br>
+            <strong>09365609067</strong>
           </div>
-          
+
           <div class="mt-3">
-            <div class="">
-              برنامه‌نویس و طراح: <strong>مجتبی جوان</strong>
-            </div>
-            <div class="text-xs">
-              <a href="" class="ml-3">Twitter</a>
-              <a href="" class="ml-3">Instagram</a>
-              <a href="" class="ml-3">Github</a>
-              <a href="" class="ml-3">Dribbble</a>
-            </div>
+            <span class="text-xs">ایمیل</span>
+            <br>
+            <strong>info@creativepanda.ir</strong>
           </div>
         </div>
       </div>
@@ -128,15 +117,65 @@
     <div class="modal" v-if="isHelpModalVisible" v-on:click.stop="isHelpModalVisible = false;" v-cloak>
       <div class="modal-wrapper" v-on:click.stop="">
         <div class="modal-header">
-          <div class="modal-title">
+          <h2 class="modal-title">
             راهنما
-          </div>
+          </h2>
           <div class="modal-action">
             <svg v-on:click="isHelpModalVisible = false;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="fill-current text-gray-500 cursor-pointer hover:text-gray-700 w-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg>
           </div>
         </div>
         <div class="modal-content">
-          
+          <h3>راس‌گیری چک و کاربرد آن</h3>
+          <p>
+            راس‌گیری چك، محاسبه‌ی سررسید واقعی تعدادی چك دریافتی یا پرداختی با مبالغ و تاریخ‌های مختلف می‌باشد.
+          </p>
+          <p>
+            به عنوان مثال اگر قصد پرداخت معامله‌ای به ارزش 100 میلیون ریال طی چند فقره چک در 40 روز
+            آینده را دارید، می‌توانید از راس‌گیری استفاده نموده و چك‌ها را طوری انتخاب كنید كه راس كلی آن‌ها
+            با تاریخ مورد نظر شما هماهنگ باشد، و برعکس، در صورت دریافت تعدادی چك جهت تسویه‌ی مبلغی مشخص در
+            تاریخی خاص، با استفاده از راس‌گیری می‌توانید راس مجموع چك‌های دریافتی را با تاریخ توافق شده
+            محاسبه و مقایسه کنید. بر این اساس، فرمول محاسبه‌ی راس کلی چک‌ها (میانگین وزن‌دار) برابر است با:
+          </p>
+          <p class="text-center text-sm">مجموع (مدت هر چک * مبلغ چک) / جمع مبلغ چک‌ها</p>
+          <span class="font-bold">مثال: </span>
+          <p>
+            اگر برای تسویه‌ی فاکتوری به تاریخ 10/01/1398 به مبلغ 100 میلیون ریال، سه چک به مبالغ 10، 30 و
+            60 میلیون ریال، به ترتیب به تاریخ‌های 01/02/1398، 15/03/1398 و 31/04/1398 دریافت کنیم، راس
+            چک‌های دریافتی به صورت زیر محاسبه خواهد شد:
+          </p>
+          <p dir="ltr" class="text-sm">
+            [(22 * 10) + ( 67 * 30) + ( 114 * 60)] / 100 = 90.70
+          </p>
+          <h3>ویژگی‌های این اپلیکیشن</h3>
+          <ul>
+            <li>قابلیت اجرا بر روی تلفن همراه و کامپیوتر</li>
+            <li>بدون محدودیت در تعداد چک و فاکتور در یک بار اجرا</li>
+            <li>قابلیت انتقال اطلاعات از Excel با کپی</li>
+            <li>
+              مقایسه‌ی تاریخ چک‌های واردشده با تقویم رسمی کشور و
+              تغییر رنگ سلول تاریخ یک چک به
+              <span class="text-orange-500 font-bold">نارنجی</span>
+              در صورت تعطیلی آن روز
+            </li>
+            <li>
+              تغییر رنگ سلول تاریخ اسناد به
+              <span class="text-red-500 font-bold">قرمز</span>
+              در صورت نادرست بودن تاریخ واردشده
+            </li>
+            <li>غیرضروری بودن ورود اطلاعات مرتبط با شماره‌ی فاکتور و شماره‌ی چک</li>
+            <li>
+              غیرضروری بودن رعایت ترتیب تاریخ‌ها در ورود اطلاعات؛ با هر بار وارد کردن اطلاعات جدید،
+              و پس از فشردن دکمه‌ی محاسبه‌ی راس چک، چک‌ها و فاکتورها بر اساس تاریخ مرتب خواهند شد
+            </li>
+            <li>
+              افزودن سطر جدید با ورود به سطر آخر هر ستون، و حذف سطرها با کلیک بر روی x
+            </li>
+            <li>
+              محاسبه‌ی راس چک با فشردن Enter و یا کلیک بر روی دکمه‌ی راس چک در پایین صفحه
+            </li>
+            <li>اجرای دوباره با Refresh کردن مرورگر</li>
+            <li>قابلیت چاپ با فشردن Ctrl+P و ذخیره با فرمت PDF</li>
+          </ul>
         </div>
       </div>
     </div>

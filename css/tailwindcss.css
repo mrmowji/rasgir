@@ -27,6 +27,10 @@ h2 {
   @apply text-xl font-bold mb-2 mt-5;
 }
 
+h3 {
+  @apply text-lg font-bold mb-2;
+}
+
 input {
   @apply outline-none bg-gray-200 border-gray-200 p-2 block border-4 rounded;
 }
@@ -115,7 +119,7 @@ ul {
 }
 
 .modal-content {
-  @apply py-5 px-8;
+  @apply py-5 px-8 text-sm;
   max-height: 350px;
   overflow-y: auto;
 }
