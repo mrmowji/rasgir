@@ -68,19 +68,19 @@ ul {
 }
 
 .input-with-error {
-  @apply border-red-500;
+  @apply border-red-300 bg-red-300;
 }
 
 .input-with-error:focus {
-  @apply border-red-300;
+  @apply border-red-400;
 }
 
 .input-with-warning {
-  @apply border-orange-400;
+  @apply border-orange-300 bg-orange-300;
 }
 
 .input-with-warning:focus {
-  @apply border-orange-300;
+  @apply border-orange-400;
 }
 
 .input-with-info {

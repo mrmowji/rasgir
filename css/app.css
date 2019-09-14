@@ -717,19 +717,21 @@ ul {
 }
 
 .input-with-error {
-  border-color: #f56565;
+  border-color: #feb2b2;
+  background-color: #feb2b2;
 }
 
 .input-with-error:focus {
-  border-color: #feb2b2;
+  border-color: #fc8181;
 }
 
 .input-with-warning {
-  border-color: #f6ad55;
+  border-color: #fbd38d;
+  background-color: #fbd38d;
 }
 
 .input-with-warning:focus {
-  border-color: #fbd38d;
+  border-color: #f6ad55;
 }
 
 .input-with-info {

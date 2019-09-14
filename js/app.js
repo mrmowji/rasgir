@@ -232,15 +232,18 @@ let app = new Vue({
       for (let i = invoicesIndex; i < this.sortedInvoices.length; i++) {
         this.sumOfUnassignedInvoices += this.sortedInvoices[i].unassignedAmount;
       }
-      console.log("Here");
+      let sumOfAssignedChecks = 0;
+      for (let i = 0; i < this.sortedChecks.length; i++) {
+        sumOfAssignedChecks += (this.sortedChecks[i].amount - this.sortedChecks[i].unassignedAmount);
+      }
       let sum = 0;
       for (let i = 0; i < this.sortedChecks.length; i++) {
         this.sortedChecks[i].result = this.sortedChecks[i].sum / this.sortedChecks[i].amount;
-        sum += this.sortedChecks[i].result;
+        sum += this.sortedChecks[i].sum;
         console.log(this.sortedChecks[i].result);
       }
 
-      this.result = (sum / this.sortedChecks.length).toFixed(2);
+      this.result = (sum / sumOfAssignedChecks).toFixed(2);
     },
     pasteChecks: function(checks) {
       if (checks.length > 0) {
