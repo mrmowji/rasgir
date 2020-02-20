@@ -154,6 +154,7 @@ let app = new Vue({
     checksMinimumAmount: 300000000,
     checksSteps: 500000,
     rasTimesSumOfInvoices: 0,
+    checksMaximumDistanceInDays: 180,
   },
   mounted: function() {
     this.addNewCheck();
@@ -290,36 +291,52 @@ let app = new Vue({
     calculateChecks: function() {
       let invoices = this.deepClone(this.invoices);
       let checks = this.deepClone(this.checks);
-      let checksUpperBound = 0;
+      let invoicesTotalAmount = 0;
       for (let i = 0; i < this.invoices.length; i++) {
-        checksUpperBound += this.invoices[i].amount;
+        invoicesTotalAmount += this.invoices[i].amount;
       }
-      this.rasTimesSumOfInvoices = this.ras * checksUpperBound;
-      let result = this.calculateChecksRecursively({
-        invoices,
-        checks,
-        index: 0,
-        checksUpperBound,
-        daysLowerBound: 0,
-      });
-      if (result == null) {
-        alert("No solution found!");
-      } else {
-        console.log(result);
-        this.checks = result;
+      let averageDistance = Math.ceil(this.checksMaximumDistanceInDays / this.checks.length);
+      let averageAmount = Math.floor(invoicesTotalAmount / this.checks.length);
+      this.rasTimesSumOfInvoices = this.ras * invoicesTotalAmount;
+      console.log(averageDistance, averageAmount, this.rasTimesSumOfInvoices);
+      debugger;
+      for (let i = 0; i <= invoicesTotalAmount && averageAmount - i > 0 && averageAmount + i <= invoicesTotalAmount; i += this.checksSteps) {
+        console.log("i: ", i);
+        for (let j = 0; j <= Math.ceil(this.checksMaximumDistanceInDays / 2) && averageDistance - j > 0; j++) {
+          console.log("j: ", j);
+          let result = this.calculateChecksRecursively({
+            invoices,
+            checks,
+            index: 0,
+            checkMinimumAmount: averageAmount - i,
+            checkMaximumAmount: averageAmount + i,
+            checkMinimumDistance: averageDistance - j,
+            checkMaximumDistance: averageDistance + j,
+            isInPreviousRange: true,
+            daysLowerBound: 0,
+          });
+          if (result !== null) {
+            console.log(result);
+            this.checks = result;
+            return;
+          }
+        }
       }
+      alert("No solution found!");
     },
     calculateChecksRecursively: function(data) {
-      let checksMinimumAmount = this.checksMinimumAmount;
-      let checksMaximumAmount = data.checksUpperBound - (this.checksMinimumAmount * (this.checks.length - data.index - 1))
-      if (data.index == this.checks.length - 1) {
-        checksMinimumAmount = data.checksUpperBound;
-      }
+      let checkMinimumAmount = data.checkMinimumAmount;
+      let checkMaximumAmount = data.checkMaximumAmount;// - (this.checksMinimumAmount * (this.checks.length - data.index - 1))
+      let checkMinimumDistance = data.checkMinimumDistance;
+      let checkMaximumDistance = data.checkMaximumDistance;
+      /*if (data.index == this.checks.length - 1) {
+        checkMinimumAmount = data.checksMaximumAmount;
+      }*/
       //console.log("Index in recursion: " + data.index);
       if (data.index == this.checks.length) {
         //console.log("Last check");
-        if (data.checksUpperBound == 0) {
-          //console.log("Upperbound: ", data.checksUpperBound);
+        //if (data.checksMaximumAmount == 0) {
+          //console.log("Upperbound: ", data.checksMaximumAmount);
           let ras = this.calculateRas(this.invoices, data.checks);
           //console.log(ras);
           if (ras == this.ras) {
@@ -327,26 +344,32 @@ let app = new Vue({
           } else if (ras > this.ras) {
             return -1;
           }
-        }
+        //}
         //console.log("No answer down here!");
         return null;
       }
       let currentCheckDate = new persianDate(data.checks[data.index].date.split("/").map(i => parseInt(i)));
       let daysInBetween = currentCheckDate.diff(new persianDate(), 'days'); // beware of 23:59:59
-      //console.log(data.checks[data.index].amount + " " + data.checks[data.index].date + " " + data.checksUpperBound);
+      //console.log(data.checks[data.index].amount + " " + data.checks[data.index].date + " " + data.checksMaximumAmount);
       if (this.checks[data.index].date != "") {
         if (this.checks[data.index].amount != "") {
           //console.log("Check " + data.index + " has both date and amount!");
           return this.calculateChecksRecursively({
             checks: data.checks,
             index: data.index + 1,
-            checksUpperBound: data.checksUpperBound - this.checks[data.index].amount,
+            checkMaximumAmount: data.checkMaximumAmount - this.checks[data.index].amount,
             daysLowerBound: data.daysLowerBound,
+            isInPreviousRange: data.isInPreviousRange,
           });
         }
         //console.log("Check " + data.index + " has date!");
-        for (let i = checksMinimumAmount; i <= checksMaximumAmount; i += this.checksSteps) {
-          if ((i * daysInBetween) > this.rasTimesSumOfInvoices || (data.checksUpperBound - i > 0 && (i * daysInBetween) > data.checksUpperBound)) {
+        for (let i = checkMinimumAmount; i <= checkMaximumAmount; i += this.checksSteps) {
+          if (data.index === checks.length - 1 && data.isInPreviousRange) {
+            if (i >= checkMinimumAmount + this.checksSteps && i <= checkMaximumAmount - this.checksSteps) {
+              continue;
+            }
+          }
+          if ((i * daysInBetween) > this.rasTimesSumOfInvoices) {//} || (data.checksMaximumAmount - i > 0 && (i * daysInBetween) > data.checksMaximumAmount)) {
             //debugger;
             break;
           }
@@ -355,7 +378,10 @@ let app = new Vue({
           let r = this.calculateChecksRecursively({
             checks: data.checks,
             index: data.index + 1,
-            checksUpperBound: data.checksUpperBound - i,
+            checkMinimumAmount: data.checkMinimumAmount,
+            checkMaximumAmount: data.checkMaximumAmount,
+            checkMinimumDistance: Math.max(daysInBetween + 1, daysInBetween + data.checkMinimumDistance),
+            checkMaximumDistance: Math.min(daysInBetween + data.checkMaximumDistance, this.checksMaximumDistance),
             daysLowerBound: data.daysLowerBound,
           });
           if (r !== null) {
@@ -365,8 +391,13 @@ let app = new Vue({
       } else {
         if (this.checks[data.index].amount != "") {
           //console.log("Check " + data.index + " has amount!");
-          for (let i = data.daysLowerBound; i < 100000; i++) {
-            if ((i * this.checks[data.index].amount) > this.rasTimesSumOfInvoices || (data.checksUpperBound - this.checks[data.index].amount > 0 && (i * this.checks[data.index].amount) > data.checksUpperBound)) {
+          for (let i = data.checkMinimumDistance; i <= data.checkMaximumDistance; i++) {
+            if (data.index === checks.length - 1 && data.isInPreviousRange) {
+              if (i >= checkMinimumDistance + 1 && i <= checkMaximumDistance - 1) {
+                continue;
+              }
+            }
+            if ((i * this.checks[data.index].amount) > this.rasTimesSumOfInvoices) {
               //debugger;
               break;
             }
@@ -374,7 +405,10 @@ let app = new Vue({
             let r = this.calculateChecksRecursively({
               checks: data.checks,
               index: data.index + 1,
-              checksUpperBound: data.checksUpperBound - this.checks[data.index].amount,
+              checkMinimumAmount: data.checkMinimumAmount,
+              checkMaximumAmount: data.checkMaximumAmount,
+              checkMinimumDistance: Math.max(i + 1, i + data.checkMinimumDistance),
+              checkMaximumDistance: Math.min(i + data.checkMaximumDistance, this.checksMaximumDistance),
               daysLowerBound: i + 1,
             });
             if (r == -1) {
@@ -387,9 +421,14 @@ let app = new Vue({
           }
         }
         //console.log("Check " + data.index + " has no info!");
-        for (let i = checksMinimumAmount; i <= checksMaximumAmount; i += this.checksSteps) {
-          for (let j = data.daysLowerBound; j < 100000; j++) {
-            if ((i * j) > this.rasTimesSumOfInvoices || (data.checksUpperBound - i > 0 && (i * j) > data.checksUpperBound)) {
+        for (let i = checkMinimumAmount; i <= checkMaximumAmount; i += this.checksSteps) {
+          for (let j = checkMinimumDistance; j <= checkMaximumDistance; j++) {
+            let isInPreviousRange = i >= checkMinimumAmount + this.checksSteps && i <= checkMaximumAmount - this.checksSteps &&
+            j >= checkMinimumDistance + 1 && j <= checkMaximumDistance - 1;
+            if (data.index === checks.length - 1 && data.isInPreviousRange && isInPreviousRange) {
+              continue;
+            }
+            if ((i * j) > this.rasTimesSumOfInvoices) {
               //debugger;
               break;
             }
@@ -399,7 +438,11 @@ let app = new Vue({
             let r = this.calculateChecksRecursively({
               checks: data.checks,
               index: data.index + 1,
-              checksUpperBound: data.checksUpperBound - i,
+              checkMinimumAmount: data.checkMinimumAmount,
+              checkMaximumAmount: data.checkMaximumAmount,
+              checkMinimumDistance: Math.max(j + 1, j + data.checkMinimumDistance),
+              checkMaximumDistance: Math.min(j + data.checkMaximumDistance, this.checksMaximumDistance),
+              isInPreviousRange: data.isInPreviousRange && isInPreviousRange,
               daysLowerBound: j + 1,
             });
             if (r == -1) {

@@ -73,9 +73,17 @@
         <div class="text-xs text-gray-500 -mb-1 mt-2">مانده<span class="text-xs mr-1">(ریال)</span></div>
         <div class="font-bold text-gray-600">{{ getFormattedAmount(sumOfUnassignedInvoices) }}</div>
       </div>
-      <div class="text-2xl text-center font-bold py-3 px-5 bg-blue-500 text-white rounded-lg mx-5 cursor-pointer" v-on:click="calculate">
+      <div class="text-2xl text-center font-bold py-3 px-5 bg-blue-500 text-white rounded-lg mx-5 cursor-pointer"
+        v-on:dblclick="toggleMode"
+        v-on:click="calculate">
         <div class="text-xs text-blue-200">راس چک</div>
-        {{ result }}</div>
+        <template v-if="mode == MODE.RAS">
+          {{ ras }}
+        </template>
+        <template v-else>
+          <input v-model="ras" type="text" class="w-24 text-center text-blue-800" v-on:dblclick.stop="" v-on:click.stop="" />
+        </template>
+      </div>
       <div class="w-1/5">
         <div class="text-xs text-gray-500 -mb-1">چک‌ها<span class="text-xs mr-1">(ریال)</span></div>
         <div class="font-bold text-gray-600">{{ formattedTotalAmountOfChecks }}</div>
@@ -183,6 +191,6 @@
   
   <script src="js/persian-date.min.js"></script>
   <script src="js/vue.min.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/app-v2.js"></script>
 </body>
 </html>
